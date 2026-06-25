@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TaskFlow | JavaScript To-Do List App</title>
+  <meta name="description" content="A fully functional client-side To-Do List application with CRUD operations, filtering, delegated events, and localStorage persistence.">
+  <meta name="author" content="Ishan Zambare">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#2563eb">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TaskFlow | JavaScript To-Do List App">
+  <meta property="og:description" content="State-driven To-Do app using DOM manipulation, event delegation, filtering, and localStorage persistence.">
+
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app-shell">
+    <header class="site-header" role="banner">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="TaskFlow home">
+          <span class="brand-mark" aria-hidden="true">✓</span>
+          <span>TaskFlow</span>
+        </a>
+
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark theme" aria-pressed="false">
+          🌙
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content" class="main-content" tabindex="-1">
+      <section class="hero" aria-labelledby="app-title">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">JavaScript Logic & State Management</p>
+            <h1 id="app-title">A clean, persistent task manager.</h1>
+            <p class="lead">
+              Add, edit, complete, delete, filter, and persist tasks automatically using browser localStorage.
+            </p>
+          </div>
+
+          <aside class="stats-panel" aria-labelledby="stats-title">
+            <h2 id="stats-title">Task summary</h2>
+            <div class="stats-grid" aria-live="polite">
+              <article class="stat-card">
+                <span class="stat-value" data-total-count>0</span>
+                <span class="stat-label">Total</span>
+              </article>
+              <article class="stat-card">
+                <span class="stat-value" data-active-count>0</span>
+                <span class="stat-label">Active</span>
+              </article>
+              <article class="stat-card">
+                <span class="stat-value" data-completed-count>0</span>
+                <span class="stat-label">Done</span>
+              </article>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="app-section" aria-labelledby="todo-heading">
+        <div class="container app-layout">
+          <section class="todo-card" aria-labelledby="todo-heading">
+            <div class="section-header">
+              <p class="eyebrow">CRUD App</p>
+              <h2 id="todo-heading">My tasks</h2>
+              <p class="muted">Data is saved automatically in this browser, even after reload.</p>
+            </div>
+
+            <form class="task-form" data-task-form aria-label="Create a new task">
+              <div class="input-group">
+                <label for="task-input">New task</label>
+                <input
+                  id="task-input"
+                  name="task"
+                  type="text"
+                  placeholder="Example: Complete JavaScript assignment"
+                  autocomplete="off"
+                  maxlength="120"
+                  required
+                  data-task-input
+                  aria-describedby="task-help task-error"
+                >
+                <p id="task-help" class="hint">Press Enter or click Add Task. Maximum 120 characters.</p>
+                <p id="task-error" class="error-message" data-task-error aria-live="polite"></p>
+              </div>
+
+              <button class="button" type="submit">Add Task</button>
+            </form>
+
+            <div class="toolbar" aria-label="Task controls">
+              <div class="filter-group" role="tablist" aria-label="Filter tasks">
+                <button class="filter-button is-active" type="button" role="tab" aria-selected="true" data-filter="all">All</button>
+                <button class="filter-button" type="button" role="tab" aria-selected="false" data-filter="active">Active</button>
+                <button class="filter-button" type="button" role="tab" aria-selected="false" data-filter="completed">Completed</button>
+              </div>
+
+              <button class="ghost-button" type="button" data-clear-completed>
+                Clear completed
+              </button>
+            </div>
+
+            <div class="list-status" data-list-status role="status" aria-live="polite">
+              No tasks yet. Add your first task.
+            </div>
+
+            <ul class="task-list" data-task-list aria-label="Task list"></ul>
+
+            <template id="task-template">
+              <li class="task-item">
+                <article class="task-row">
+                  <label class="check-wrap">
+                    <input class="task-checkbox" type="checkbox" data-action="toggle">
+                    <span class="custom-checkbox" aria-hidden="true"></span>
+                    <span class="visually-hidden">Mark task complete</span>
+                  </label>
+
+                  <div class="task-content">
+                    <p class="task-title" data-task-title></p>
+                    <p class="task-date" data-task-date></p>
+                  </div>
+
+                  <form class="edit-form" data-edit-form hidden>
+                    <label class="visually-hidden">Edit task</label>
+                    <input class="edit-input" type="text" maxlength="120" data-edit-input>
+                    <div class="edit-actions">
+                      <button class="small-button" type="submit">Save</button>
+                      <button class="small-button ghost-small" type="button" data-action="cancel-edit">Cancel</button>
+                    </div>
+                  </form>
+
+                  <div class="task-actions">
+                    <button class="icon-button" type="button" data-action="edit" aria-label="Edit task">Edit</button>
+                    <button class="icon-button danger" type="button" data-action="delete" aria-label="Delete task">Delete</button>
+                  </div>
+                </article>
+              </li>
+            </template>
+          </section>
+
+          <aside class="info-card" aria-labelledby="features-heading">
+            <h2 id="features-heading">Implemented features</h2>
+            <ul class="feature-list">
+              <li><strong>Create:</strong> Add new tasks from the form.</li>
+              <li><strong>Read:</strong> Render task state dynamically from JavaScript.</li>
+              <li><strong>Update:</strong> Edit titles and toggle completion.</li>
+              <li><strong>Delete:</strong> Remove tasks individually.</li>
+              <li><strong>Persistence:</strong> Save automatically with localStorage.</li>
+              <li><strong>Filtering:</strong> View All, Active, or Completed tasks.</li>
+              <li><strong>Delegation:</strong> One list listener handles task buttons.</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container footer-inner">
+        <p>&copy; <span data-current-year></span> TaskFlow. Built with vanilla JavaScript.</p>
+        <p class="muted">No framework. No backend. Fully client-side.</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
